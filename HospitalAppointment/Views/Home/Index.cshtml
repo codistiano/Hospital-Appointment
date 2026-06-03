@@ -1,0 +1,37 @@
+@model List<HospitalAppointment.Models.AuditLogEntry>
+@{ ViewData["Title"] = "Dashboard"; }
+
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card text-bg-light"><div class="card-body"><h6>Patients</h6><h2>@ViewBag.PatientCount</h2></div></div></div>
+    <div class="col-md-3"><div class="card text-bg-light"><div class="card-body"><h6>Doctors</h6><h2>@ViewBag.DoctorCount</h2></div></div></div>
+    <div class="col-md-3"><div class="card text-bg-light"><div class="card-body"><h6>Appointments</h6><h2>@ViewBag.AppointmentCount</h2></div></div></div>
+    <div class="col-md-3"><div class="card text-bg-light"><div class="card-body"><h6>Prescriptions</h6><h2>@ViewBag.PrescriptionCount</h2></div></div></div>
+</div>
+
+<div class="card">
+    <div class="card-header"><strong>Recent Events</strong> <span class="text-muted">(written by *Log handlers via the Event Bus)</span></div>
+    <div class="card-body">
+        @if (!Model.Any())
+        {
+            <p class="text-muted mb-0">No events yet. <a asp-controller="Appointment" asp-action="Create">Schedule an appointment</a> to publish your first event.</p>
+        }
+        else
+        {
+            <table class="table table-sm">
+                <thead><tr><th>Time</th><th>Event</th><th>Message</th></tr></thead>
+                <tbody>
+                @foreach (var entry in Model)
+                {
+                    <tr>
+                        <td><small>@entry.Timestamp.ToLocalTime().ToString("g")</small></td>
+                        <td><span class="badge bg-primary event-pill">@entry.EventType</span></td>
+                        <td>@entry.Message</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

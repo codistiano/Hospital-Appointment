@@ -1,0 +1,31 @@
+@model HospitalAppointment.Models.Appointment
+@{ ViewData["Title"] = "Issue Prescription"; }
+
+<h1>Issue Prescription</h1>
+<p class="text-muted">Publishes a <code>PrescriptionIssuedEvent</code> handled by the Pharmacy + Audit-Log consumers.</p>
+
+<div class="card card-body mb-3">
+    <strong>Appointment #@Model.Id</strong><br />
+    Patient: @Model.Patient?.FullName · Doctor: @Model.Doctor?.FullName
+</div>
+
+<form asp-action="Prescribe" method="post" class="card card-body">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <div class="mb-3">
+        <label class="form-label">Medication</label>
+        <input name="medication" class="form-control" required placeholder="e.g. Amoxicillin" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Dosage</label>
+        <input name="dosage" class="form-control" required placeholder="e.g. 500mg, twice a day" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Instructions</label>
+        <textarea name="instructions" class="form-control" rows="3" placeholder="Take with food..."></textarea>
+    </div>
+    <div>
+        <button class="btn btn-primary">Issue Prescription</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </div>
+</form>

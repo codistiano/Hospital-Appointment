@@ -1,0 +1,55 @@
+@model IReadOnlyList<HospitalAppointment.Models.Appointment>
+@{ ViewData["Title"] = "Appointments"; }
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>Appointments</h1>
+    <a class="btn btn-primary" asp-action="Create">+ New Appointment</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No appointments yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr><th>#</th><th>Patient</th><th>Doctor</th><th>When</th><th>Status</th><th>Reason</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var a in Model)
+        {
+            <tr>
+                <td>@a.Id</td>
+                <td>@a.Patient?.FullName</td>
+                <td>@a.Doctor?.FullName <small class="text-muted">(@a.Doctor?.Specialization)</small></td>
+                <td>@a.ScheduledFor.ToString("g")</td>
+                <td>
+                    @{
+                        var color = a.Status switch
+                        {
+                            HospitalAppointment.Models.AppointmentStatus.Scheduled  => "bg-secondary",
+                            HospitalAppointment.Models.AppointmentStatus.CheckedIn  => "bg-success",
+                            HospitalAppointment.Models.AppointmentStatus.Completed  => "bg-info",
+                            _ => "bg-dark"
+                        };
+                    }
+                    <span class="badge @color">@a.Status</span>
+                </td>
+                <td>@a.Reason</td>
+                <td class="text-end">
+                    @if (a.Status == HospitalAppointment.Models.AppointmentStatus.Scheduled)
+                    {
+                        <form asp-action="CheckIn" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@a.Id" />
+                            <button class="btn btn-sm btn-success">Check In</button>
+                        </form>
+                    }
+                    <a class="btn btn-sm btn-outline-primary" asp-action="Prescribe" asp-route-id="@a.Id">Prescribe</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
