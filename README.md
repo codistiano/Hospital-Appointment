@@ -14,7 +14,7 @@
 4. Abduselam Nurhussen (@AbduselamNur)
 5. Perez Endale (@MMKSRF)
 6. Daniel Dereje (@Dayele-1997)
-7. Dawit Ayana (@Devaor71
+7. Dawit Ayana (@Devaor71)
 
 ---
 
